@@ -40,6 +40,8 @@ install:
   - python setup.py install
   # install packages required for building and uploading
   - conda install --yes anaconda-client
+  # fetch a custom condarc for building and uploading to anaconda.org.
+  - wget https://gist.githubusercontent.com/ericdill/960e933953eee6d428b0/raw/b468527d9eea692b1ca68263f7f59084f80ac3cc/.condarc -O ~/.condarc
   - conda install --yes -n root conda-build=1.18.1
 
 script:
