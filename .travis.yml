@@ -1,5 +1,8 @@
 language: python
 sudo: false
+env:
+  global:
+    secure: "LZbIEeI4gY96eNVr/hRYPNcxhh73MrWTj3KtIdD36ev0ZrdxG8gqEdeTESpjEFzab/jRqSfcO+Ue0bQpsco0Nlna71HQP+99NmWyKRJdIztCaMg6+C7j5JRX8zvhafQCXWf6q3RwmRCTcVfkAHr2xhFpxxlFZ1wqnf0cJOrgCBIWwKjVvwxz6Did6NX5WTlkS7MB5peGmUjcZzDT3uTqmAtlMSsbyc/UWlrr3AQpBJ5O38rA9yDWMlpoAcCVHkHMhRalAkqNRy5uRF/WTRcIjVvBKmnr6EQxRGKLbZAULbFOgIaRyLEo611gdlSJCqrMHdinLQ/NU7y+8yilYSDg8mnN3CD0vwHoaO0FBemtHrI2+XMChxSWAPKxAtOACx3OX/HYbV7N9a8GrMmgyjcpyaHEDSQi8v5zBxJvxVZ67Uke/7/N+1OL/+UnI6NXAYOE8gDPjyCQS11M8VprIWxyGhWgg76PJx1ZCmo3JUUPwJb27TbKUX0nJeKO4cybz+AwLcpysIPo09Hncktm3QGYlETk0S8PUyMm8rRCzUDBkLpCl0lc2Ym+np3YyqLQBgvV0umuI6vXWNQxvv3AEA/cv2J3uLjhHMazKuwAsMSLBXCgD+8Sg5EZAzSUzKsphGANgS7UM7X3f2rAPggxvkmWkVRLbJ6iw9zxXHEyGFOzbWg="
 
 services:
   - mongodb
@@ -10,7 +13,7 @@ python:
 before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   - "export DISPLAY=:99.0"
-  - if [ ${TRAVIS_PYTHON_VERSION:0:1} == "2" ]; then wget http://repo.continuum.io/miniconda/Miniconda-3.5.5-Linux-x86_64.sh -O miniconda.sh; else wget http://repo.continuum.io/miniconda/Miniconda3-3.5.5-Linux-x86_64.sh -O miniconda.sh; fi
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
   - ./miniconda.sh -b -p /home/travis/mc
   - export PATH=/home/travis/mc/bin:$PATH
@@ -38,3 +41,10 @@ install:
 
 script:
   - python run_tests.py -v
+  - conda build conda-recipe
+
+after_success:
+  - if [[ ( "$TRAVIS_PULL_REQUEST" == 'false' ) && ( "$TRAVIS_BRANCH" == 'auto-build-on-travis' ) ]] ; then
+      anaconda -t ${BINSTAR_TOKEN} upload $(conda build conda build conda-recipe --output) -u lightsource2 -c development --force;
+    fi;
+
