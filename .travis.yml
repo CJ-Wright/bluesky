@@ -36,6 +36,7 @@ install:
   - conda install --yes boltons prettytable -c lightsource2
   - conda install --yes super_state_machine cycler databroker xray-vision lmfit -c tacaswell
   - conda install --yes pymongo=2.6.3 pcaspy pyepics readline -c tacaswell
+  - conda install --yes anaconda-client conda-build=1.18.1
   - pip install coveralls historydict
   - python setup.py install
 
