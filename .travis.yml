@@ -41,7 +41,7 @@ install:
   - python setup.py install
 
 script:
-  - python run_tests.py -v
+  # - python run_tests.py -v
   - conda build conda-recipe
 
 after_success:
