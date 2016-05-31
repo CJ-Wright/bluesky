@@ -40,7 +40,6 @@ install:
   - conda create -n testenv nose python=$TRAVIS_PYTHON_VERSION scipy requests matplotlib jsonschema traitlets pytest coverage
   - source activate testenv
   - conda install metadatastore databroker ophyd historydict boltons doct toolz tifffile pymongo pcaspy pyepics readline super_state_machine cycler xray-vision lmfit jinja2 -c soft-matter
-  - conda remove metadatastore databroker filestore --yes --force
   - pip install codecov
   - python setup.py install
   # Need to clean the python build directory (and other cruft) or pytest is
